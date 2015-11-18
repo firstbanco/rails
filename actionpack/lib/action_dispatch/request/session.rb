@@ -140,6 +140,10 @@ module ActionDispatch
       end
 
       def inspect
+        puts "#{Time.current}: in #{self.class}.#{__method__}: loaded? = #{loaded?}"
+        puts GC.stat
+        puts caller.first(5)
+        puts "*" * 10
         if loaded?
           super
         else
