@@ -145,7 +145,20 @@ module ActionDispatch
         puts caller.first(5)
         puts "*" * 10
         if loaded?
-          super
+          begin
+            puts "Before super call"
+            puts "self.class.ancestors = #{self.class.ancestors}"
+            puts "method(:inspect).super_method = #{method(:inspect).super_method}"
+            super
+          rescue => e
+            puts "In inspect exception handler"
+            puts e.inspect
+            puts
+            puts e.backtrace
+            puts
+            puts caller
+            puts
+          end
         else
           "#<#{self.class}:0x#{(object_id << 1).to_s(16)} not yet loaded>"
         end
