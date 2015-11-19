@@ -139,6 +139,15 @@ module ActionDispatch
         end
       end
 
+      def inspect_var(name, var)
+        puts "handling: #{name}"
+        puts "========"
+        puts var.object_id
+        puts var.class
+        puts var.method(:inspect).source_location || 'cannot determine source_location of .inspect!'
+        puts "========"
+      end
+
       def inspect
         puts "#{Time.current}: in #{self.class}.#{__method__}: loaded? = #{loaded?}"
         puts GC.stat
@@ -149,6 +158,8 @@ module ActionDispatch
             puts "Before super call"
             puts "self.class.ancestors = #{self.class.ancestors}"
             puts "method(:inspect).super_method = #{method(:inspect).super_method}"
+            inspect_var('self', self)
+            instance_variables.each { |ivar| inspect_var(ivar, instance_variable_get(ivar)) }
             super
           rescue => e
             puts "In inspect exception handler"
